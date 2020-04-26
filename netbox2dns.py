@@ -48,7 +48,7 @@ def main():
         if nb_vm.primary_ip4:
             host_ip = str(nb_vm.primary_ip4).split('/')[0]
             resource_name = re.sub('[^0-9a-zA-Z]+', '_', nb_vm.name)
-            host_name = re.sub('[^0-9a-zA-Z]+', '-', nb_vm.name)
+            host_name = re.sub('[^0-9a-zA-Z..]+', '-', nb_vm.name)
             hosts.append(
                         {
                          'resource_name': resource_name, 
