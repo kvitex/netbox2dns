@@ -1,0 +1,10 @@
+{% for host in hosts %}
+resource "dns_a_record_set" "{{ host.hostname.replace('.','_') }}" {
+  zone = "{{ zone }}"
+  name = "{{ host.hostname }}"
+  addresses = ["{{ host.ip }}"]
+  {% if ttl %}
+  ttl = {{ ttl }}
+  {% endif -%}
+}
+{% endfor %}
