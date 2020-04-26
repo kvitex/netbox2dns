@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import re
 import pynetbox
 from dotenv import load_dotenv
 from jinja2 import Template
@@ -33,12 +34,14 @@ def main():
     for nb_device in nb_devices:
         if nb_device.primary_ip4:
             host_ip = str(nb_device.primary_ip4).split('/')[0]
-            hosts.append({'hostname': nb_device.name, 'ip': host_ip})
+            resource_name = re.sub('[^0-9a-zA-Z]+', '_', nb_device.name)
+            hosts.append({'hostname': resource_name, 'ip': host_ip})
     nb_vms = nb.virtualization.virtual_machines.filter(status=1)
     for nb_vm in nb_vms:
         if nb_vm.primary_ip4:
             host_ip = str(nb_vm.primary_ip4).split('/')[0]
-            hosts.append({'hostname': nb_vm.name, 'ip': host_ip})
+            resource_name = re.sub('[^0-9a-zA-Z]+', '_', nb_vm.name)
+            hosts.append({'hostname': resource_name, 'ip': host_ip})
     with open(zone_template, 'r') as read_file:
         template = Template(read_file.read())
     print(template.render(hosts=hosts, zone=zone, ttl=ttl))

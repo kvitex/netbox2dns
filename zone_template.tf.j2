@@ -1,6 +1,5 @@
 {% for host in hosts %}
-{% set resource_name = host.hostname.replace('.','_') %}
-resource "dns_a_record_set" "{{ resource_name.replace('-','_') }}" {
+resource "dns_a_record_set" "{{ host.hostname }}" {
   zone = "{{ zone }}"
   name = "{{ host.hostname }}"
   addresses = ["{{ host.ip }}"]
