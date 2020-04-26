@@ -1,7 +1,7 @@
 {% for host in hosts %}
-resource "dns_a_record_set" "{{ host.hostname }}" {
+resource "dns_a_record_set" "{{ host.resource_name }}" {
   zone = "{{ zone }}"
-  name = "{{ host.hostname }}"
+  name = "{{ host.host_name }}"
   addresses = ["{{ host.ip }}"]
   {% if ttl %}
   ttl = {{ ttl }}

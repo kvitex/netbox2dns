@@ -35,13 +35,27 @@ def main():
         if nb_device.primary_ip4:
             host_ip = str(nb_device.primary_ip4).split('/')[0]
             resource_name = re.sub('[^0-9a-zA-Z]+', '_', nb_device.name)
-            hosts.append({'hostname': resource_name, 'ip': host_ip})
+            host_name = re.sub('[^0-9a-zA-Z]+', '-', nb_device.name)
+            hosts.append(
+                        {
+                         'resource_name': resource_name, 
+                         'host_name': host_name,
+                         'ip': host_ip
+                         }
+                         )
     nb_vms = nb.virtualization.virtual_machines.filter(status=1)
     for nb_vm in nb_vms:
         if nb_vm.primary_ip4:
             host_ip = str(nb_vm.primary_ip4).split('/')[0]
             resource_name = re.sub('[^0-9a-zA-Z]+', '_', nb_vm.name)
-            hosts.append({'hostname': resource_name, 'ip': host_ip})
+            host_name = re.sub('[^0-9a-zA-Z]+', '-', nb_vm.name)
+            hosts.append(
+                        {
+                         'resource_name': resource_name, 
+                         'host_name': host_name,
+                         'ip': host_ip
+                         }
+                         )
     with open(zone_template, 'r') as read_file:
         template = Template(read_file.read())
     print(template.render(hosts=hosts, zone=zone, ttl=ttl))
