@@ -2,6 +2,7 @@
 import os
 import re
 import pynetbox
+import requests
 from dotenv import load_dotenv
 from jinja2 import Template
 
@@ -22,13 +23,15 @@ if netbox_key_file:
 netboxcfg           = {
                       'url'           : netbox_url,
                       'token'         : netbox_token,
-                      'ssl_verify'    : ssl_verify,
                       netbox_key_src  : netbox_key_vlaue  
                       }
 
 
-def main():    
+def main():
+    session = requests.Session()
+    session.verify = ssl_verify    
     nb = pynetbox.api(**netboxcfg)
+    nb.http_session = session
     hosts = []
     nb_devices = nb.dcim.devices.filter(status=1)
     for nb_device in nb_devices:
